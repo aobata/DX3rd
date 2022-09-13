@@ -1,0 +1,47 @@
+
+<span>Dice Count</span>
+<input type="number" id="diceCount" value="5" min="1" max="30" >
+<span>Critical</span>
+<input type="number" id="critical" value="10" min="2" max="11">
+
+<button onclick="go()">Go!</button>
+<button onclick="clr()">clear</button>
+
+<div id="field"></div>
+
+<style> 
+*{font-size: 24px;}
+</style>
+
+<script>
+let diceCount
+let critical
+
+const field = document.getElementById("field")
+const d10 = () => Math.floor(10 * Math.random()) +1
+const nD10 = n => Array(Math.floor(n)).fill().map(d10)
+
+function check(n) {
+  if (n < 1) return 0
+  if (critical < 2) return Infinity
+  let dice = nD10(n)
+  write(dice.join(" "))
+  n = dice.filter(x => x >= critical).length
+  return n ? 10 + check(n) : Math.max(...dice)
+}
+
+function go() {
+  diceCount = document.getElementById("diceCount").value
+  critical = document.getElementById("critical").value
+  write("<strong>Achievement: " + check(diceCount) + "</strong>")
+}
+
+function write(line) {
+  field.innerHTML += "<p>" + line + "</p>"
+}
+
+function clr() {
+  field.innerHTML = ""
+}
+
+</script>
